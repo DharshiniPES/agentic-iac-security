@@ -39,3 +39,7 @@ reports/generated/
 
 # Streamlit cache
 .streamlit/
+
+database/scans.db
+__pycache__/
+*.pyc
