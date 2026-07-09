@@ -1,0 +1,9 @@
+resource "aws_ebs_volume" "data_volume" {
+
+  availability_zone = "us-east-1a"
+
+  size = 20
+
+  encrypted = false
+
+}

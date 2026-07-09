@@ -1,3 +1,4 @@
+import os
 import hcl2
 
 from parser.resource_extractor import ResourceExtractor
@@ -5,22 +6,40 @@ from detection.detector import DetectionEngine
 from risk.risk_scoring import RiskScoringEngine
 from explainability.ai_explainer import ExplainabilityEngine
 from remediation.recommendation_engine import RecommendationEngine
+
+
 class TerraformParser:
 
-    def __init__(self, filepath):
-        self.filepath = filepath
+    def __init__(self, folder_path):
+        self.folder_path = folder_path
 
     def parse(self):
 
-        with open(self.filepath, "r") as file:
+        terraform_data = {
+            "resource": []
+        }
 
-            content = file.read()
+        for filename in os.listdir(self.folder_path):
 
-            print(content)
+            if filename.endswith(".tf"):
 
-            file.seek(0)
+                filepath = os.path.join(
+                    self.folder_path,
+                    filename
+                )
 
-            terraform_data = hcl2.load(file)
+                with open(filepath, "r") as file:
+
+                    print(f"\n===== {filename} =====\n")
+                    print(file.read())
+
+                    file.seek(0)
+
+                    parsed_data = hcl2.load(file)
+
+                    terraform_data["resource"].extend(
+                        parsed_data.get("resource", [])
+                    )
 
         return terraform_data
 
@@ -28,7 +47,7 @@ class TerraformParser:
 if __name__ == "__main__":
 
     parser = TerraformParser(
-        "terraform_samples/security_groups.tf"
+        "terraform_samples"
     )
 
     terraform_data = parser.parse()
@@ -46,7 +65,8 @@ if __name__ == "__main__":
 
     findings = detector.run_detection(resources)
 
-    print(findings)
+    print("\n=== DETECTION RESULTS ===")
+    pprint(findings)
 
     risk_engine = RiskScoringEngine()
 
@@ -54,7 +74,8 @@ if __name__ == "__main__":
         findings
     )
 
-    print(scored_findings)
+    print("\n=== RISK ASSESSMENT ===")
+    pprint(scored_findings)
 
     explainer = ExplainabilityEngine()
 
@@ -64,17 +85,16 @@ if __name__ == "__main__":
         )
     )
 
-    print(explained_findings)
+    print("\n=== EXPLANATIONS ===")
+    pprint(explained_findings)
 
-    recommendation_engine = (
-        RecommendationEngine()
-    )
+    recommendation_engine = RecommendationEngine()
 
     final_findings = (
-        recommendation_engine
-        .generate_recommendations(
+        recommendation_engine.generate_recommendations(
             explained_findings
         )
     )
 
-    print(final_findings)
+    print("\n=== FINAL SECURITY REPORT ===")
+    pprint(final_findings)

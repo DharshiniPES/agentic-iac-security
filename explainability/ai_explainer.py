@@ -31,7 +31,48 @@ class ExplainabilityEngine:
                     "brute-force attacks, credential stuffing, "
                     "and vulnerability scanning."
                 )
+            elif finding["rule_id"] == "RULE_004":
 
+                finding["explanation"] = (
+                    "This IAM policy grants wildcard permissions "
+                    "using Action (*). Excessive permissions violate "
+                    "the Principle of Least Privilege and may allow "
+                    "attackers to perform unauthorized actions if "
+                    "the credentials are compromised."
+                )
+            elif finding["rule_id"] == "RULE_005":
+
+                finding["explanation"] = (
+                    "This S3 bucket does not have server-side "
+                    "encryption enabled. Data stored in the bucket "
+                    "may be exposed if unauthorized access to the "
+                    "underlying storage occurs."
+                )
+            elif finding["rule_id"] == "RULE_006":
+
+                finding["explanation"] = (
+                    "This S3 bucket does not have versioning enabled. "
+                    "Without versioning, deleted or overwritten objects "
+                    "cannot be easily recovered, increasing the risk of "
+                    "accidental data loss."
+                )
+            elif finding["rule_id"] == "RULE_007":
+
+                finding["explanation"] = (
+                    "This EBS volume is not encrypted. "
+                    "If unauthorized access to the storage "
+                    "or snapshots occurs, sensitive data "
+                    "could be exposed."
+                )
+            elif finding["rule_id"] == "RULE_008":
+
+                finding["explanation"] = (
+                    "AWS CloudTrail is not enabled. Without "
+                    "CloudTrail, security events and API "
+                    "activities are not recorded, making "
+                    "incident investigation and compliance "
+                    "more difficult."
+                )
             explained_findings.append(finding)
 
         return explained_findings
