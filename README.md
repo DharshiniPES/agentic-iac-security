@@ -158,7 +158,7 @@ agentic-iac-security/
 Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/agentic-iac-security.git
+git clone https://github.com/DharshiniPES/agentic-iac-security.git
 ```
 
 Move into the project
